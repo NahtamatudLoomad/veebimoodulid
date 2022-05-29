@@ -14,6 +14,4 @@ jobs:
         run: |
           echo "${{secrets.SSH_KEY}}" > deploy_key
           chmod 600 ./deploy_key
-          rsync --no-o --no-g --no-perms --exclude 'node_modules' --exclude '.github' -chav --delete \
-            -e 'ssh -i ./deploy_key -o StrictHostKeyChecking=no' \
-            . ${{env.dest}}
+          rsync -rave "ssh -i ./deploy_key" --exclude '.github' --exclude '.git' --delete ./* ${{env.dest}}
