@@ -1,0 +1,19 @@
+name: Build & Deploy
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Rsync deployment
+        env:
+          dest: "doggo@165.227.163.13:/srv/web/cdn"
+        run: |
+          echo "${{secrets.SSH_KEY}}" > deploy_key
+          chmod 600 ./deploy_key
+          rsync --exclude 'node_modules' --exclude '.github' -chav --delete \
+            -e 'ssh -i ./deploy_key -o StrictHostKeyChecking=no' \
+            ./ ${{env.dest}}
