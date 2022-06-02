@@ -1,4 +1,4 @@
-class ProgressBar extends HTMLElement {
+export class ProgressBar extends HTMLElement {
   static get observedAttributes() {
     return ['total', 'current'];
   }
